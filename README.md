@@ -22,7 +22,7 @@ To allow a more complete Microsoft experience (we assume thats what people expec
 ## Multi-Route Planning 
 Often app users have more that one destination they wish to visit, be it popular tourist attractions or serveral stores you want to swing by before you head home. Our app offered to solve this problem with what we call Multi-Route Planning. The problem is basically the famous "Traveling Salesman Problem". Users can choose any number of waypoints. We first obtain the shortest route between every pair of points and contruct a complete graph. Then a algorthim is used to solve the TSP. The result route is then shown to on the map to our users.
 
-![alt text](.\Photos\route.PNG)
+![alt text](".\Photos\route.PNG")
 <img src=".\Photos\direction.PNG" width="20%"/> 
 
 ## Data Visualization
