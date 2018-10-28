@@ -1,0 +1,70 @@
+<ons-page id="menuPage">
+
+    <ons-list-title>Facility</ons-list-title>
+    <ons-list id="links">
+        <div id="home">
+            <ons-list-item tappable tap-background-color="#007FFF">
+                Home
+            </ons-list-item>
+        </div>
+        <div id="weather" style="display:none">
+            <ons-list-item tappable tap-background-color="#007FFF">
+                Weather
+            </ons-list-item>
+        </div>
+        <div id="humid" style="display:none">
+            <ons-list-item tappable tap-background-color="#007FFF">
+                Humid
+            </ons-list-item>
+        </div>
+        <div id="temperature" style="display:none">
+            <ons-list-item tappable tap-background-color="#007FFF">
+                Temperature
+            </ons-list-item>
+        </div>
+        <div id="list_item_direction">
+            <ons-list-item tappable tap-background-color="#007FFF">
+                Direction
+            </ons-list-item>
+        </div>
+        <div id="list_item_routing">
+            <ons-list-item tappable>
+                Routing
+            </ons-list-item>
+        </div>
+    </ons-list>
+
+    <ons-list-title>Your Plugins</ons-list-title>
+    <ons-list id="plugin-list">
+        <!--<ons-list-item id="normalmode">
+            <div class="left">
+                <ons-fab modifier="mini">
+                    <i class="far fa-eye-slash"></i>
+                </ons-fab>
+            </div>
+            <div class="center">
+                without plugins
+            </div>
+        </ons-list-item>-->
+        <ons-list-item id="weathermode">
+            <div class="left">
+                <ons-fab modifier="mini">
+                    <i class="fas fa-cloud"></i>
+                </ons-fab>
+            </div>
+            <div class="center">
+                WeatherMood
+            </div>
+        </ons-list-item>
+        <ons-list-item>
+            <div class="left">
+                <ons-fab component="add_plugin" modifier="mini">
+                    <i class="fas fa-plus"></i>
+                </ons-fab>
+            </div>
+            <div class="center">
+                add some new...
+            </div>
+        </ons-list-item>
+    </ons-list>
+</ons-page>

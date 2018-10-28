@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--
+        視需要在下方的中繼標籤中自訂內容安全性原則。將 'unsafe-inline' 加入 default-src 以啟用內嵌 JavaScript。
+        如需詳細資料，請參閱 http://go.microsoft.com/fwlink/?LinkID=617521
+    -->
+    <!--- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+     --->
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/chen.css">
+    <a href="https://icons8.com">Icon pack by Icons8</a>
+    <title>BingMaps</title>
+    <script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+
+    <script src="lib/onsen/js/onsenui.js"></script>
+
+    <script src="scripts/app.js"></script>
+    <script src="scripts/services.js"></script>
+    <script src="scripts/controllers.js"></script>
+
+
+    <link rel="stylesheet" href="lib/onsen/css/onsenui.css">
+    <link rel="stylesheet" href="lib/onsen/css/onsen-css-components.css">
+
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+</head>
+<body>
+    <!-- First navigation component: Navigator. This will remain always on top of the app. -->
+    <ons-navigator id="myNavigator" page="splitter.html">
+    </ons-navigator>
+
+
+    <!-- Second navigation component: Splitter. This will disappear if the first component changes its content. -->
+    <template id="splitter.html">
+        <ons-page>
+            <ons-splitter id="mySplitter">
+                <ons-splitter-side page="html/menu.html" swipeable width="250px" collapse swipe-target-width="50px">
+                </ons-splitter-side>
+
+                <ons-splitter-content page="home.html">
+                </ons-splitter-content>
+            </ons-splitter>
+        </ons-page>
+    </template>
+
+
+    <!---modified-->
+    <template id="home.html">
+        <ons-page id="home">
+            <div style="height:100%; overflow:hidden">
+                <div id="myMap" style="width: 100%; height: 100% ;position:absolute;z-index:1">
+                    <img component="button/menu" style="z-index:5;position:absolute;padding:10px 10px 10px 10px" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHg9IjBweCIgeT0iMHB4IgogICAgIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIKICAgICB2aWV3Qm94PSIwIDAgNDggNDgiCiAgICAgc3R5bGU9ImZpbGw6IzAwMDAwMDsiPjxnIGlkPSJzdXJmYWNlMSI+PHBhdGggc3R5bGU9IiBmaWxsOiNGRjU3MjI7IiBkPSJNIDIyIDIyIEwgNiAyMiBMIDYgNiBMIDIyIDYgWiAiPjwvcGF0aD48cGF0aCBzdHlsZT0iIGZpbGw6IzRDQUY1MDsiIGQ9Ik0gNDIgMjIgTCAyNiAyMiBMIDI2IDYgTCA0MiA2IFogIj48L3BhdGg+PHBhdGggc3R5bGU9IiBmaWxsOiNGRkMxMDc7IiBkPSJNIDQyIDQyIEwgMjYgNDIgTCAyNiAyNiBMIDQyIDI2IFogIj48L3BhdGg+PHBhdGggc3R5bGU9IiBmaWxsOiMwM0E5RjQ7IiBkPSJNIDIyIDQyIEwgNiA0MiBMIDYgMjYgTCAyMiAyNiBaICI+PC9wYXRoPjwvZz48L3N2Zz4=">
+                </div>
+
+                <ons-search-input component="search_button" class="searchBar"
+                                  placeholder="Search Bing"
+                                  style="width:90%; margin-left:1rem; margin-top: 5px"
+                                  onchange="onSearchChange()">
+                </ons-search-input>
+                <div class="result-card">
+                    <ons-card style="text-transform: none !important">
+                        <div style="display:inline-block; width: 77%" ;>
+                            <h2 id="searchCardTitle"></h2>
+                        </div>
+                        <div id="save-icon" onclick="onSaveIconClick()">
+                            <div id="bookmark-outline-icon"><ons-icon icon="md-bookmark-outline" /></div>
+                            <div id="bookmark-icon"><ons-icon icon="md-bookmark" /></div>
+
+                        </div>
+                        <div id="close-icon" onclick="onCloseCardClick()">
+                            <ons-icon icon="md-close-circle" id="nav-icon" />
+                        </div>
+                        <hr />
+                        <div class="searchCardContent" style="text-align: justify">
+                            <div id="address">
+                                <div id="adminDistrict"></div>
+                                <div id="country"></div>
+                            </div>
+                            <div style="display: inline-block"></div>
+                            <ons-button component="back_button" style="margin-bottom: 1rem;">
+                                Go
+                                <ons-icon icon="md-navigation" id="nav-icon" />
+                            </ons-button>
+                        </div>
+                        <div class="searchCardImages">
+                            <img id="cityImage1" class="city-image" />
+                            <img id="cityImage2" class="city-image" />
+                        </div>
+                    </ons-card>
+                </div>
+                <canvas id="legendCanvas" hidden></canvas>
+            </div>
+        </ons-page>
+    </template>
+
+
+    <template id="direction.html">
+        <ons-page id='page_direct'>
+            <div style="background-color: #8191aa">
+                <div class="ditrection-header">
+                    <ons-row vertical-align="top">
+                        <ons-col width="2%" vertical-align="center">
+                            <div style="font-size:24px; color: white;">
+                                <i id="back_arw" style="margin-left:250%;  margin-top:150%;" class="fas fa-arrow-left fa-lg"></i>
+                            </div>
+                        </ons-col>
+                        <ons-col width="98%" vertical-align="center">
+                            <form class="direct_form top" action="">
+                                <input id="p2pStartpoint" class="direct_input" type="search">
+                                <i class="fa fa-search"></i>
+                            </form>
+                        </ons-col>
+                    </ons-row>
+                    <ons-row vertical-align="top">
+                        <ons-col width="100%" vertical-align="center">
+                            <div class="center" style="text-align:center ;padding-top:3%; padding-bottom:5%;padding-left:2% ">
+                                <form class="direct_form" action="">
+                                    <input id="p2pEndpoint" class="direct_input" type="search">
+                                    <i class="fa fa-search"></i>
+                                </form>
+                            </div>
+                        </ons-col>
+                    </ons-row>
+                </div>
+                <ons-row>
+                    <ons-col width="100%" vertical-align="center">
+                        <div style="background-color: #8191aa">
+                            <a href="#" id="btn0" class="direct_button leftest_btn" onclick="p2pSearch('driving')">
+                                <i class="fas fa-car fa-2x"></i>
+                            </a>
+                            <a href="#" id="btn1" class="direct_button" onclick="p2pSearch('truck')">
+                                <i class="fas fa-bus fa-2x"></i>
+                            </a>
+                            <a href="#" id="btn2" class="direct_button" onclick="p2pSearch('walking')">
+                                <i class="fas fa-walking fa-2x"></i>
+                            </a>
+                            <a href="#" id="btn3" class="direct_button" onclick="p2pSearch('transit')">
+                                <i class="fas fa-subway fa-2x"></i>
+                            </a>
+                        </div>
+                    </ons-col>
+                </ons-row>
+            </div>
+            <div class="directionMap" style="width:100%; height:100%; position:absolute; z-index:1"></div>
+        </ons-page>
+    </template>
+
+    <template id="routing.html">
+        <ons-page id='page_routing'>
+
+            <div id="rounting_f_row" style="background-color: #8191aa">
+                <ons-row vertical-align="top">
+
+
+                    <ons-col width="2%" vertical-align="center">
+                        <div style="font-size:24px; color: white;">
+                            <i id="back_arw" style="margin-left:150%;  margin-top:150%;" class="fas fa-arrow-left fa-lg"></i>
+                        </div>
+                    </ons-col>
+
+                    <ons-col width="85%" vertical-align="center">
+                        <form class="routing_form top" action="">
+                            <input id="routing_input" class="direct_input" type="search">
+                        </form>
+                    </ons-col>
+
+                    <ons-col width="13%" vertical-align="center">
+                        <a href="#">
+                            <i id="routing_plus" class="routing_plus fas fa-plus fa-2x"></i>
+                        </a>
+                    </ons-col>
+
+                </ons-row>
+
+            </div>
+
+            <div id="rounting_s_row" style="font-size: 18px;">
+                <ons-row vertical-align="top">
+                    <ons-col width="100%" vertical-align="center">
+                        <div style="text-align:center">
+                            <a href="#" id="routing_begin" class="routing_btn">
+                                <i class="fas fa-route fa-lg"></i>
+                            </a>
+                        </div>
+                    </ons-col>
+                </ons-row>
+
+            </div>
+
+
+        </ons-page>
+    </template>
+    <div class="app">
+        <h1>Apache Cordova</h1>
+        <div id="deviceready" class="blink">
+            <p class="event listening">正在連接到裝置</p>
+            <p class="event received">裝置已就緒</p>
+        </div>
+    </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="scripts/platformOverrides.js"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
+</body>
+</html>
